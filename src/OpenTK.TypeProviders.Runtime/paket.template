@@ -1,35 +1,38 @@
 type file
 id OpenTK.TypeProviders
 authors
-    Steffen Forkmann, Gustavo Guerra, JohnDoeKyrgyz, Don Syme
+    Wiinuk
 owners
-    Steffen Forkmann, Gustavo Guerra, JohnDoeKyrgyz, Don Syme
+    Wiinuk
 projectUrl
-    http://github.com/fsprojects/OpenTK.TypeProviders
+    http://github.com/wiinuk/OpenTK.TypeProviders
 iconUrl
-    https://raw.githubusercontent.com/fsprojects/OpenTK.TypeProviders/master/docs/files/img/logo.png
+    https://raw.githubusercontent.com/wiinuk/OpenTK.TypeProviders/master/docs/files/img/logo.png
 licenseUrl
-    http://github.com/fsprojects/OpenTK.TypeProviders/blob/master/LICENSE.txt
+    http://opensource.org/licenses/MIT
 requireLicenseAcceptance
     false
 tags
-    F# fsharp typeproviders OpenTK.TypeProviders
+    F# fsharp typeproviders
 summary
     This library is for the .NET platform implementing OpenTK.TypeProviders.
 description
     This library is for the .NET platform implementing OpenTK.TypeProviders.
 tags
-    F# fsharp typeproviders OpenTK.TypeProviders
+    F# fsharp typeproviders
 files
-    bin/Release/net45/OpenTK.TypeProviders.Runtime.* ==> lib/net45
+    bin/Release/net461/OpenTK.TypeProviders.Runtime.* ==> lib/net461
     bin/Release/netstandard2.0/OpenTK.TypeProviders.Runtime.* ==> lib/netstandard2.0
     bin/Release/typeproviders/fsharp41/netstandard2.0/*.dll ==> typeproviders/fsharp41/netstandard2.0
     bin/Release/typeproviders/fsharp41/netcoreapp2.0/*.dll ==> typeproviders/fsharp41/netcoreapp2.0
-    bin/Release/typeproviders/fsharp41/net45/*.dll ==> typeproviders/fsharp41/net45
+    bin/Release/typeproviders/fsharp41/net461/*.dll ==> typeproviders/fsharp41/net461
 references
     OpenTK.TypeProviders.Runtime.dll
 dependencies
-  FSharp.Core >= LOCKEDVERSION
+    FSharp.Core >= LOCKEDVERSION
+    OpenTK >= LOCKEDVERSION
+    System.Drawing.Primitives >= LOCKEDVERSION
+    System.Drawing.Common >= LOCKEDVERSION
 
 # put any package references here
 #  Some.Package
