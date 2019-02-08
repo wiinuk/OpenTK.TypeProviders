@@ -237,13 +237,13 @@ type ShaderVariables =
     [<RequiresExplicitTypeArguments>]
     member vs.GetAttribute<'T> index: 'T ShaderAttribute =
         match vs.[index] with
-        | ShaderVariable.ShaderAttribute v when typeof<'T>.TypeHandle = v.definition.cliType -> ShaderAttribute.ShaderAttribute v
+        | ShaderVariable.ShaderAttribute v -> ShaderAttribute.ShaderAttribute v
         | v -> failwithf "attribute (%s) not found. found variable: %A" typeof<'T>.Name v
 
     [<RequiresExplicitTypeArguments>]
     member vs.GetUniform<'T> index: 'T ShaderUniform =
         match vs.[index] with
-        | ShaderVariable.ShaderUniform v when typeof<'T>.TypeHandle = v.definition.cliType -> ShaderUniform.ShaderUniform v
+        | ShaderVariable.ShaderUniform v -> ShaderUniform.ShaderUniform v
         | v -> failwithf "uniform (%s) not found. found variable: %A" typeof<'T>.Name v
 
 module Untype =
