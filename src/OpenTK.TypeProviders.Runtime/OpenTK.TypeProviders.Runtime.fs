@@ -83,11 +83,7 @@ module internal Internals =
         ) format
 
 module GL =
-    open System.IO
-    open System.Drawing
-    open System.Drawing.Imaging
     open OpenTK
-
 
     let buildProgram vertexShaderSource fragmentShaderSource: ProgramPhantom Handle =
         let compileShader source shaderType =
@@ -145,37 +141,6 @@ module GL =
 
     let deleteBuffer ({ handle = Handle h }: #IBufferPhantom<_> BufferInfo) = GL.DeleteBuffer h
     let deleteTexture (Handle h: #ITexturePhantom Handle) = GL.DeleteTexture h
-
-    let loadAndCreateTexture (dataStream: Stream): Texture2DPhantom Handle =
-        use bitmap = new Bitmap(dataStream)
-
-        let data = bitmap.LockBits(Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb)
-        try
-            let texture = GL.GenTexture()
-            if texture <= 0 then glfailwithf "GenTexture() = %d" texture
-
-            GL.BindTexture(TextureTarget.Texture2D, texture)
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, int TextureMinFilter.Linear)
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, int TextureMagFilter.Linear)
-
-            let mipmapLevel = 0
-            let borderWidth = 0
-            GL.TexImage2D(
-                TextureTarget.Texture2D,
-                mipmapLevel,
-                PixelInternalFormat.Rgba,
-                data.Width,
-                data.Height,
-                borderWidth,
-                PixelFormat.Rgba,
-                PixelType.UnsignedByte,
-                data.Scan0
-            )
-            GL.BindTexture(TextureTarget.Texture2D, 0)
-            Handle texture
-
-        finally
-            bitmap.UnlockBits data
 
     let deleteProgram (Handle h: ProgramPhantom Handle) =
         GL.DeleteProgram h

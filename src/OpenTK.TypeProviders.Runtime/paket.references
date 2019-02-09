@@ -1,6 +1,4 @@
 FSharp.Core
 OpenTK
-System.Drawing.Primitives
-System.Drawing.Common
 File:ProvidedTypes.fsi
 File:ProvidedTypes.fs

@@ -31,8 +31,6 @@ references
 dependencies
     FSharp.Core >= LOCKEDVERSION
     OpenTK >= LOCKEDVERSION
-    System.Drawing.Primitives >= LOCKEDVERSION
-    System.Drawing.Common >= LOCKEDVERSION
 
 # put any package references here
 #  Some.Package

@@ -7,8 +7,6 @@ nuget FSharp.Core ~> 4.5.2
 
 nuget NETStandard.Library.NETFramework
 nuget OpenTK
-nuget System.Drawing.Common
-nuget System.Drawing.Primitives
 # nuget System.Text.Encoding.CodePages
 
 # THis lines are used by Paket to get the latest version of the Type Provider SDK files
