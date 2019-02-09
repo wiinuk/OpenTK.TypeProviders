@@ -38,9 +38,11 @@ type TestWindow() =
         |]
 
     let mutable mvpMatrix = Matrix4.Identity
+
+    let mutable isGrounded = false
     let mutable p = Vector2d.Zero
     let mutable v = Vector2d.Zero
-    let accel norm = v <- v + Vector2d.Multiply(norm, 0.1)
+    let accel norm = v <- v + Vector2d.Multiply(norm, 0.2)
 
     override __.OnLoad e =
         base.OnLoad e
@@ -56,7 +58,11 @@ type TestWindow() =
         match e.Key with
         | Key.Right -> accel Vector2d.UnitX
         | Key.Left -> accel -Vector2d.UnitX
-        | Key.Up -> accel Vector2d.UnitY
+        | Key.Up ->
+            if isGrounded then
+                accel Vector2d.UnitY
+                isGrounded <- false
+
         | Key.Down -> accel -Vector2d.UnitY
         | _ -> ()
 
@@ -68,7 +74,12 @@ type TestWindow() =
         base.OnUpdateFrame e
 
         p <- p + v
+        if p.Y < 0. then
+            isGrounded <- true
+            v <- v + Vector2d(0., -p.Y)
+
         v <- v * 0.9
+        v <- v + Vector2d(0., -0.01)
 
     override g.OnRenderFrame e =
         base.OnRenderFrame e

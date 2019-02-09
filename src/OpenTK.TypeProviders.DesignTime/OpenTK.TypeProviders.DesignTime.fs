@@ -91,7 +91,7 @@ type public ShaderProgramProvider(config: TypeProviderConfig) as this =
 
         // nested type ShaderVariables =
         //     inherit ShaderVariable array
-        let variablesT = ProvidedTypeDefinition("ShaderVariables", Some typeof<ShaderVariable array>, hideObjectMethods = true, nonNullable = true)
+        let variablesT = ProvidedTypeDefinition("ShaderVariables", Some typeof<ShaderVariable array>)
 
         let currentFolder = config.ResolutionFolder
         let { source = vertexSource } as vertex = readIfPathLike currentFolder vertex

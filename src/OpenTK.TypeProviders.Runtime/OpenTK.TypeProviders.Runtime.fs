@@ -149,8 +149,6 @@ module GL =
     let loadAndCreateTexture (dataStream: Stream): Texture2DPhantom Handle =
         use bitmap = new Bitmap(dataStream)
 
-        // png ‚Ì”½“]‚ð’¼‚·
-        bitmap.RotateFlip RotateFlipType.RotateNoneFlipY
         let data = bitmap.LockBits(Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb)
         try
             let texture = GL.GenTexture()
