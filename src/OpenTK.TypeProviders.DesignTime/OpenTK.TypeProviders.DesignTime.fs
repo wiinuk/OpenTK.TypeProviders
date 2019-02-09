@@ -90,15 +90,16 @@ type public ShaderProgramProvider(config: TypeProviderConfig) as this =
         let fragment = args.[1] :?> string
 
         // nested type ShaderVariables =
-        let variablesT = ProvidedTypeDefinition("ShaderVariables", Some typeof<ShaderVariables>, hideObjectMethods = true, nonNullable = true)
+        //     inherit ShaderVariable array
+        let variablesT = ProvidedTypeDefinition("ShaderVariables", Some typeof<ShaderVariable array>, hideObjectMethods = true, nonNullable = true)
 
         let currentFolder = config.ResolutionFolder
         let { source = vertexSource } as vertex = readIfPathLike currentFolder vertex
         let { source = fragmentSource } as fragment = readIfPathLike currentFolder fragment
         let sourceInfos = [vertex; fragment] |> Seq.collect SimpleParser.parseSimpleSourceInfo |> Seq.cache
 
-        let getAttributeMD, _ = findMethod <@ fun (v: ShaderVariables) -> v.GetAttribute<_> @>
-        let getUniformMD, _ = findMethod <@ fun (v: ShaderVariables) -> v.GetUniform<_> @>
+        let getAttributeMD, _ = findMethod <@ Untype.getAttribute<_> @>
+        let getUniformMD, _ = findMethod <@ Untype.getUniform<_> @>
 
         sourceInfos
         |> Seq.mapi (fun i { location = l; value = d } ->
@@ -122,7 +123,7 @@ type public ShaderProgramProvider(config: TypeProviderConfig) as this =
             // TODO: mangle, escape
             let p =
                 ProvidedProperty(d.meta.variableName, propertyType, getterCode =
-                    fun args -> Expr.Call(<@ %%(args.[0]): ShaderVariables @>, getM, [ <@ i @> ])
+                    fun args -> Expr.Call(getM, [ <@ %%(args.[0]): ShaderVariable array @>; <@ i @> ])
                 )
 
             do

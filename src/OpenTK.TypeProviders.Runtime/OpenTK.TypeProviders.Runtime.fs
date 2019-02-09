@@ -208,48 +208,37 @@ module GL =
     let drawElements (b: 'T ElementArrayBufferPhantom BufferInfo) =
         GL.DrawElements(PrimitiveType.Triangles, b.length, DrawElementsType.UnsignedShort, 0)
 
-[<Struct>]
-type ShaderVariables =
-    val private variables: ShaderVariable array
-    new (program: ProgramPhantom Handle, variableDefinitions) = {
-        variables =
-            let (Handle program) = program
-
-            variableDefinitions
-            |> Seq.map (fun d ->
-                match d.spec with
-                | ShaderAttributeSpec spec ->
-                    ShaderVariable.ShaderAttribute {
-                        location = GL.GetAttribLocation(program, d.meta.variableName)
-                        definition = { cliType = d.cliType; meta = d.meta; spec = spec }
-                    }
-                | ShaderUniformSpec spec ->
-                    ShaderVariable.ShaderUniform {
-                        location = GL.GetUniformLocation(program, d.meta.variableName)
-                        definition = { cliType = d.cliType; meta = d.meta; spec = spec }
-                    }
-            )
-            |> Seq.toArray
-    }
-    member vs.Item with get index = vs.variables.[index]
-    member vs.All() = vs.variables |> Seq.readonly
-    
+module Untype =
     [<RequiresExplicitTypeArguments>]
-    member vs.GetAttribute<'T> index: 'T ShaderAttribute =
+    let getAttribute<'T> (vs: _ array) index: 'T ShaderAttribute =
         match vs.[index] with
         | ShaderVariable.ShaderAttribute v -> ShaderAttribute.ShaderAttribute v
         | v -> failwithf "attribute (%s) not found. found variable: %A" typeof<'T>.Name v
 
     [<RequiresExplicitTypeArguments>]
-    member vs.GetUniform<'T> index: 'T ShaderUniform =
+    let getUniform<'T> (vs: _ array) index: 'T ShaderUniform =
         match vs.[index] with
         | ShaderVariable.ShaderUniform v -> ShaderUniform.ShaderUniform v
         | v -> failwithf "uniform (%s) not found. found variable: %A" typeof<'T>.Name v
 
-module Untype =
     type ShaderProgram(vertexShaderSource, fragmentShaderSource, variableDefinitions) =
-        let program = GL.buildProgram vertexShaderSource fragmentShaderSource
-        let variables = ShaderVariables(program, variableDefinitions)
+        let (Handle p) as program = GL.buildProgram vertexShaderSource fragmentShaderSource
+        let variables =
+            variableDefinitions
+            |> Seq.map (fun d ->
+                match d.spec with
+                | ShaderAttributeSpec spec ->
+                    ShaderVariable.ShaderAttribute {
+                        location = GL.GetAttribLocation(p, d.meta.variableName)
+                        definition = { cliType = d.cliType; meta = d.meta; spec = spec }
+                    }
+                | ShaderUniformSpec spec ->
+                    ShaderVariable.ShaderUniform {
+                        location = GL.GetUniformLocation(p, d.meta.variableName)
+                        definition = { cliType = d.cliType; meta = d.meta; spec = spec }
+                    }
+            )
+            |> Seq.toArray
 
         member __.Handle = program
         member __.Variables = variables
